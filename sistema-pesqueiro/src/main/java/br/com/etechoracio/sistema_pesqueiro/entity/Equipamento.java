@@ -4,22 +4,37 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+import jakarta.persistence.*;
+import lombok.*;
+
 @Entity
-@Table(name= "TBL_EQUIPAMENTOS")
+@Table(name = "TBL_EQUIPAMENTOS")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Equipamento {
     @Id
-    @Column(name = "ID_EQUIPAMENTOS")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEquipamentos;
+    @Column(name = "ID_EQUIPAMENTOS")
+    private Integer id;
 
     @Column(name = "NOME_EQUIPAMENTO")
-    private String nomeEquipamneto;
+    private String nome;
+
+    @Column(name = "QUANTIDADE_EQUIPAMENTO")
+    private Integer quantidade;
 
     @Column(name = "EQUIPAMENTO_EM_USO")
-    private boolean equipamentoUso;
+    private Boolean equipamentoEmUso;
 
-    @Column(name = " QUANTIDADE_EQUIPAMENTO")
-    private int quantidadeEquipamento;
+    @Column(name = "ESTADO")
+    private String estado;
+
+    @Column(name = "ULTIMO_USO")
+    private String ultimoUso;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_PESQUEIRO")
+    private Pesqueiro responsavelPesqueiro;
 }

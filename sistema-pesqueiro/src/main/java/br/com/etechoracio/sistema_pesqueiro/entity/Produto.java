@@ -1,30 +1,30 @@
 package br.com.etechoracio.sistema_pesqueiro.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
-@Table(name = "TBL_COMENTARIOS")
+@Table(name = "TBL_PRODUTOS")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Comentario {
+public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_COMENTARIO")
+    @Column(name = "ID_PRODUTO")
     private Integer id;
 
-    @Column(name = "TEXTO", length = 1000)
-    private String texto;
+    @Column(name = "NOME_PRODUTO")
+    private String nome;
 
-    @Column(name = "AVALIACAO")
-    private Integer avaliacao;
+    @Column(name = "QTD_PRODUTO")
+    private Integer quantidade;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_CLIENTE")
-    private Cliente cliente;
+    @Column(name = "VALOR_PRODUTO")
+    private Double valor;
+
+    @Column(name = "FORNECEDOR")
+    private String fornecedor;
 
     @ManyToOne
     @JoinColumn(name = "ID_PESQUEIRO")
