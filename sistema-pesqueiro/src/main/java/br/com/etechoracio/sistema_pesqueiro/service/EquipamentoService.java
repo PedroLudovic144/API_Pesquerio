@@ -2,11 +2,10 @@ package br.com.etechoracio.sistema_pesqueiro.service;
 
 import br.com.etechoracio.sistema_pesqueiro.dto.EquipamentoDTO;
 import br.com.etechoracio.sistema_pesqueiro.entity.Equipamento;
-import br.com.etechoracio.sistema_pesqueiro.entity.Pesqueiro;
 import br.com.etechoracio.sistema_pesqueiro.entity.Funcionario;
+import br.com.etechoracio.sistema_pesqueiro.entity.Pesqueiro;
+import br.com.etechoracio.sistema_pesqueiro.mapper.EquipamentoMapper;
 import br.com.etechoracio.sistema_pesqueiro.repository.EquipamentoRepository;
-import br.com.etechoracio.sistema_pesqueiro.repository.PesqueiroRepository;
-import br.com.etechoracio.sistema_pesqueiro.repository.FuncionarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,84 +16,36 @@ import java.util.stream.Collectors;
 public class EquipamentoService {
 
     private final EquipamentoRepository equipamentoRepository;
-    private final PesqueiroRepository pesqueiroRepository;
-    private final FuncionarioRepository funcionarioRepository;
+    private final EquipamentoMapper equipamentoMapper;
 
-    public EquipamentoService(EquipamentoRepository equipamentoRepository,
-                              PesqueiroRepository pesqueiroRepository,
-                              FuncionarioRepository funcionarioRepository) {
+    public EquipamentoService(EquipamentoRepository equipamentoRepository, EquipamentoMapper equipamentoMapper) {
         this.equipamentoRepository = equipamentoRepository;
-        this.pesqueiroRepository = pesqueiroRepository;
-        this.funcionarioRepository = funcionarioRepository;
-    }
-
-    public EquipamentoDTO toDto(Equipamento e) {
-        if (e == null) return null;
-        EquipamentoDTO dto = new EquipamentoDTO();
-        dto.setId(e.getId());
-        dto.setNome(e.getNome());
-        dto.setPesqueiroId(e.getPesqueiro() != null ? e.getPesqueiro().getId() : null);
-        dto.setFuncionarioId(e.getFuncionario() != null ? e.getFuncionario().getId() : null);
-        return dto;
-    }
-
-    public Equipamento toEntity(EquipamentoDTO dto) {
-        if (dto == null) return null;
-        Equipamento e = new Equipamento();
-        e.setId(dto.getId());
-        e.setNome(dto.getNome());
-        if (dto.getPesqueiroId() != null) {
-            Pesqueiro p = pesqueiroRepository.findById(dto.getPesqueiroId())
-                    .orElse(Pesqueiro.builder().id(dto.getPesqueiroId()).build());
-            e.setPesqueiro(p);
-        } else {
-            e.setPesqueiro(null);
-        }
-        if (dto.getFuncionarioId() != null) {
-            Funcionario f = funcionarioRepository.findById(dto.getFuncionarioId())
-                    .orElse(Funcionario.builder().id(dto.getFuncionarioId()).build());
-            e.setFuncionario(f);
-        } else {
-            e.setFuncionario(null);
-        }
-        return e;
+        this.equipamentoMapper = equipamentoMapper;
     }
 
     public EquipamentoDTO create(EquipamentoDTO dto) {
-        Equipamento entity = toEntity(dto);
+        Equipamento entity = equipamentoMapper.toEntity(dto);
         Equipamento saved = equipamentoRepository.save(entity);
-        return toDto(saved);
+        return equipamentoMapper.toDto(saved);
     }
 
     public EquipamentoDTO update(Integer id, EquipamentoDTO dto) {
         Optional<Equipamento> opt = equipamentoRepository.findById(id);
         if (opt.isEmpty()) return null;
         Equipamento entity = opt.get();
-        entity.setNome(dto.getNome());
-        if (dto.getPesqueiroId() != null) {
-            Pesqueiro p = pesqueiroRepository.findById(dto.getPesqueiroId())
-                    .orElse(Pesqueiro.builder().id(dto.getPesqueiroId()).build());
-            entity.setPesqueiro(p);
-        } else {
-            entity.setPesqueiro(null);
-        }
-        if (dto.getFuncionarioId() != null) {
-            Funcionario f = funcionarioRepository.findById(dto.getFuncionarioId())
-                    .orElse(Funcionario.builder().id(dto.getFuncionarioId()).build());
-            entity.setFuncionario(f);
-        } else {
-            entity.setFuncionario(null);
-        }
+        entity.setNome(dto.nome());
+        entity.setPesqueiro(dto.pesqueiroId() != null ? new Pesqueiro(dto.pesqueiroId()) : null);
+        entity.setFuncionario(dto.funcionarioId() != null ? new Funcionario(dto.funcionarioId()) : null);
         Equipamento saved = equipamentoRepository.save(entity);
-        return toDto(saved);
+        return equipamentoMapper.toDto(saved);
     }
 
     public EquipamentoDTO findById(Integer id) {
-        return equipamentoRepository.findById(id).map(this::toDto).orElse(null);
+        return equipamentoRepository.findById(id).map(equipamentoMapper::toDto).orElse(null);
     }
 
     public List<EquipamentoDTO> findAll() {
-        return equipamentoRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        return equipamentoRepository.findAll().stream().map(equipamentoMapper::toDto).collect(Collectors.toList());
     }
 
     public void deleteById(Integer id) {

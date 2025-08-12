@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Pesqueiro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PESQUEIRO")
@@ -51,4 +52,8 @@ public class Pesqueiro {
 
     @OneToMany(mappedBy = "pesqueiro", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios;
+
+    public Pesqueiro(Integer id) {
+        this.id = id;
+    }
 }

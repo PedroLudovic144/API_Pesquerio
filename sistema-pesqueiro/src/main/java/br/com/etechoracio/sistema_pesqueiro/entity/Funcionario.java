@@ -32,4 +32,8 @@ public class Funcionario {
             joinColumns = @JoinColumn(name = "ID_FUNCIONARIO"),
             inverseJoinColumns = @JoinColumn(name = "ID_EQUIPAMENTOS"))
     private List<Equipamento> equipamentosUsados;
+
+    public Funcionario(Integer id) {
+        this.id = id;
+    }
 }

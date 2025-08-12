@@ -2,15 +2,5 @@ package br.com.etechoracio.sistema_pesqueiro.dto;
 
 import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class ProdutoDTO {
-    private Integer id;
-    private String nome;
-    private Integer quantidade;
-    private Double valor;
-    private String fornecedor;
-    private Integer pesqueiroId;
-}
+public record ProdutoDTO(Integer id,String nome,Integer quantidade,Double valor,String fornecedor,Integer pesqueiroId) {}
