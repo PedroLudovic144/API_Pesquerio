@@ -11,7 +11,6 @@ public interface ComentarioMapper {
     @Mapping(source = "cliente.id", target = "clienteId")
     ComentarioDTO toDto(Comentario entity);
 
-    // Aqui só mapeia os campos simples, sem tentar criar Pesqueiro/Cliente
     @Mapping(target = "pesqueiro", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     Comentario toEntity(ComentarioDTO dto);

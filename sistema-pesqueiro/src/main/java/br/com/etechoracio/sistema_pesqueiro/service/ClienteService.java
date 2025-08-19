@@ -32,7 +32,7 @@ public class ClienteService {
             return null;
         }
         Cliente entity = opt.get();
-        // Atualiza apenas os campos necessários
+
         entity.setNome(dto.nome());
         entity.setEmail(dto.email());
         Cliente saved = clienteRepository.save(entity);

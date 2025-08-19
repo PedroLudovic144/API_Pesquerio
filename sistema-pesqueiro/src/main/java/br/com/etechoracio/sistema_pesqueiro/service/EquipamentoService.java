@@ -34,8 +34,7 @@ public class EquipamentoService {
         if (opt.isEmpty()) return null;
         Equipamento entity = opt.get();
         entity.setNome(dto.nome());
-        entity.setPesqueiro(dto.pesqueiroId() != null ? new Pesqueiro(dto.pesqueiroId()) : null);
-        entity.setFuncionario(dto.funcionarioId() != null ? new Funcionario(dto.funcionarioId()) : null);
+        entity.setResponsavelPesqueiro(dto.pesqueiroId() != null ? new Pesqueiro(dto.pesqueiroId()) : null);
         Equipamento saved = equipamentoRepository.save(entity);
         return equipamentoMapper.toDto(saved);
     }
